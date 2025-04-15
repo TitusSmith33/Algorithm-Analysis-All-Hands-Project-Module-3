@@ -13,9 +13,9 @@ These projects enable students to explore both the scientific and engineering as
 The group working on the project housed in this repo is:
 
 * [Titus Smith](https://github.com/TitusSmith33)
-* [Daniel Bekele] (https://github.com/Danniyb)
-* [Meghan Wolfarth] (https://github.com/meghanwolfarth)
-* [Darius Googe] (https://github.com/Darius90332)
+* [Daniel Bekele](https://github.com/Danniyb)
+* [Meghan Wolfarth](https://github.com/meghanwolfarth)
+* [Darius Googe](https://github.com/Darius90332)
 * [Finley Banas]
 
 ## Hash Table Configuration
