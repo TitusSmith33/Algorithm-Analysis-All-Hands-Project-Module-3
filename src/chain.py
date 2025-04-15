@@ -28,4 +28,12 @@ class HashTableChainning:
                     return
             bucket.append((key, value))
 
-    
+    def get(self, key):
+        """Retrieves the value associated with the given key from the hash table."""
+
+        index = hash(key) % self.capacity
+        bucket = self.buckets[index]
+        for k, v in bucket:
+            if k == key:
+                return v
+            return None
