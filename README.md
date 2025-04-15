@@ -16,7 +16,7 @@ The group working on the project housed in this repo is:
 * [Daniel Bekele](https://github.com/Danniyb)
 * [Meghan Wolfarth](https://github.com/meghanwolfarth)
 * [Darius Googe](https://github.com/Darius90332)
-* [Finley Banas]
+* [Finley Banas](https://github.com/Finley8)
 
 ## Hash Table Configuration
 
