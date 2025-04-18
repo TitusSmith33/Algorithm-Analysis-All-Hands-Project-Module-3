@@ -42,15 +42,10 @@ def benchmark_get_operations(ht_class, capacity: int, kv_pairs: List[Tuple[Any, 
 def run_doubling_experiment(kv_pairs_list: List[List[Tuple[Any, Any]]], 
                           existing_keys_list: List[List[Any]], 
                           non_existing_keys_list: List[List[Any]]):
-    """Run doubling experiment comparing different hash table implementations.
-    
-    Args:
-        kv_pairs_list: List of key-value pairs for each size
-        existing_keys_list: List of existing keys to test for each size
-        non_existing_keys_list: List of non-existing keys to test for each size
-    """
-    print("Size\tChain Time\tChain Collisions\tOpen Time\tOpen Collisions\tHybrid Time\tHybrid Collisions")
-    print("----\t----------\t---------------\t---------\t--------------\t-----------\t----------------")
+    """Run doubling experiment comparing different hash table implementations."""
+    print("\nHash Table Population Performance (Time in seconds)")
+    print("Size\tChain Populate\tChain Collisions\tOpen Populate\tOpen Collisions\tHybrid Populate\tHybrid Collisions")
+    print("----\t-------------\t---------------\t------------\t--------------\t--------------\t----------------")
     
     for i, (kv_pairs, existing_keys, non_existing_keys) in enumerate(zip(
         kv_pairs_list, existing_keys_list, non_existing_keys_list)):
@@ -61,24 +56,18 @@ def run_doubling_experiment(kv_pairs_list: List[List[Tuple[Any, Any]]],
         open_time, open_collisions = benchmark_put_operations(HashTableOpenAddressing, size, kv_pairs)
         hybrid_time, hybrid_collisions = benchmark_put_operations(HashTableHybrid, size, kv_pairs)
         
-        # Print results
-        print(f"{size}\t{chain_time:.6f}\t{chain_collisions}\t{open_time:.6f}\t{open_collisions}\t{hybrid_time:.6f}\t{hybrid_collisions}")
+        # Print results with consistent formatting
+        print(f"{size:<8}\t{chain_time:.6f}\t{chain_collisions:<15}\t{open_time:.6f}\t{open_collisions:<14}\t{hybrid_time:.6f}\t{hybrid_collisions}")
 
 def run_lookup_experiment(kv_pairs: List[Tuple[Any, Any]], 
                         existing_keys: List[Any], 
                         non_existing_keys: List[Any]):
-    """Run experiment comparing lookup times for existing and non-existing keys.
-    
-    Args:
-        kv_pairs: List of key-value pairs to insert
-        existing_keys: List of keys that exist in the hash table
-        non_existing_keys: List of keys that don't exist in the hash table
-    """
-    print("\nLookup Performance Comparison")
-    print("Implementation\tExisting Keys Time\tNon-existing Keys Time")
-    print("-------------\t-----------------\t---------------------")
-    
+    """Run experiment comparing lookup times for existing and non-existing keys."""
     size = len(kv_pairs)
+    print(f"\nLookup Performance Comparison (Time in seconds) - Searching through {size} items")
+    print("Implementation\tExisting Key Lookup (1000 keys)\tNon-existing Key Lookup (1000 keys)")
+    print("-------------\t-------------------------\t---------------------------")
+    
     # Benchmark each implementation
     chain_existing, chain_non_existing = benchmark_get_operations(
         HashTableChainning, size, kv_pairs, existing_keys, non_existing_keys)
@@ -87,10 +76,10 @@ def run_lookup_experiment(kv_pairs: List[Tuple[Any, Any]],
     hybrid_existing, hybrid_non_existing = benchmark_get_operations(
         HashTableHybrid, size, kv_pairs, existing_keys, non_existing_keys)
     
-    # Print results
-    print(f"Chaining\t{chain_existing:.6f}\t{chain_non_existing:.6f}")
-    print(f"Open Addressing\t{open_existing:.6f}\t{open_non_existing:.6f}")
-    print(f"Hybrid\t{hybrid_existing:.6f}\t{hybrid_non_existing:.6f}")
+    # Print results with consistent formatting
+    print(f"Chaining\t{chain_existing:.6f}\t\t\t{chain_non_existing:.6f}")
+    print(f"Open Addressing\t{open_existing:.6f}\t\t\t{open_non_existing:.6f}")
+    print(f"Hybrid\t\t{hybrid_existing:.6f}\t\t\t{hybrid_non_existing:.6f}")
 
 if __name__ == "__main__":
     print("Running doubling experiment...")
