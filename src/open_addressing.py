@@ -1,5 +1,5 @@
 """Configure a hash table using an open addressing approach."""
- 
+
 class HashTableOpenAddressing:
     """A hash table implementation using open addressing with linear probing."""
     def __init__(self, capacity):
