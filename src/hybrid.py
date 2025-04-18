@@ -60,20 +60,20 @@ class HashTableHybrid:
             if self.table[index] is None:
                 return None
             elif isinstance(self.table[index], list):
-                # Initial chaining phase if we reach a list
-                for k, v in self.table[index]:
-                    if k == key:
-                        return v
+                # Search in the chain
+                for item in self.table[index]:
+                    if isinstance(item, tuple) and item[0] == key:
+                        return item[1]
                 return None
-            elif self.table[index][0] == key:
+            elif isinstance(self.table[index], tuple) and self.table[index][0] == key:
                 return self.table[index][1]
             else:
                 index = (index + 1) % self.capacity
                 probes += 1
 
-        # Final chaining phase (if we reach a list in the slot)
+        # Final chaining phase
         if isinstance(self.table[index], list):
-            for k, v in self.table[index]:
-                if k == key:
-                    return v
+            for item in self.table[index]:
+                if isinstance(item, tuple) and item[0] == key:
+                    return item[1]
         return None
