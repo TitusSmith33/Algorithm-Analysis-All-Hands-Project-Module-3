@@ -60,9 +60,9 @@ def main():
     # Run lookup experiment using benchmark module
     print("\nRunning lookup experiment...")
     benchmark.run_lookup_experiment(
-        kv_pairs_list[-1],  # Use the largest set of key-value pairs
-        existing_keys_list[-1],  # Use the corresponding existing keys
-        non_existing_keys_list[-1]  # Use the corresponding non-existing keys
+    kv_pairs_list,
+    existing_keys_list,
+    non_existing_keys_list
     )
 
 if __name__ == "__main__":

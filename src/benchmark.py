@@ -40,50 +40,56 @@ def benchmark_get_operations(ht_class, capacity: int, kv_pairs: List[Tuple[Any, 
     return existing_time, non_existing_time
 
 def run_doubling_experiment(kv_pairs_list: List[List[Tuple[Any, Any]]], 
+                            existing_keys_list: List[List[Any]], 
+                            non_existing_keys_list: List[List[Any]]):
+    """Run doubling experiment comparing different hash table implementations."""
+
+
+    def print_table(title, benchmark_func):
+        """Generate structure for displaying experiment data."""
+        print(f"\n{title} Hash Table Population Performance (seconds)")
+        print("Size\tPopulate Time\t Num. of Collisions")
+        print("----\t--------------\t----------")
+        for kv_pairs in kv_pairs_list:
+            size = len(kv_pairs)
+            time_taken, collisions = benchmark_func(size, kv_pairs)
+            print(f"{size:<4}\t{time_taken:.6f}\t{collisions}")
+    
+    # run and print results of generating a hash table with a given configuration
+    # display results independently for comprehension
+    print_table("Chaining", lambda size, pairs: benchmark_put_operations(HashTableChainning, size, pairs))
+    print_table("Open Addressing", lambda size, pairs: benchmark_put_operations(HashTableOpenAddressing, size, pairs))
+    print_table("Hybrid", lambda size, pairs: benchmark_put_operations(HashTableHybrid, size, pairs))
+
+
+def run_lookup_experiment(kv_pairs_list: List[List[Tuple[Any, Any]]], 
                           existing_keys_list: List[List[Any]], 
                           non_existing_keys_list: List[List[Any]]):
-    """Run doubling experiment comparing different hash table implementations."""
-    print("\nHash Table Population Performance (Time in seconds)")
-    print("Size\tChain Populate\tChain Collisions\tOpen Populate\tOpen Collisions\tHybrid Populate\tHybrid Collisions")
-    print("----\t-------------\t---------------\t------------\t--------------\t--------------\t----------------")
-    
-    for i, (kv_pairs, existing_keys, non_existing_keys) in enumerate(zip(
-        kv_pairs_list, existing_keys_list, non_existing_keys_list)):
-        
-        size = len(kv_pairs)
-        # Benchmark each implementation
-        chain_time, chain_collisions = benchmark_put_operations(HashTableChainning, size, kv_pairs)
-        open_time, open_collisions = benchmark_put_operations(HashTableOpenAddressing, size, kv_pairs)
-        hybrid_time, hybrid_collisions = benchmark_put_operations(HashTableHybrid, size, kv_pairs)
-        
-        # Print results with consistent formatting
-        print(f"{size:<8}\t{chain_time:.6f}\t{chain_collisions:<15}\t{open_time:.6f}\t{open_collisions:<14}\t{hybrid_time:.6f}\t{hybrid_collisions}")
+    """Run doubling experiment comparing lookup times for existing and non-existing keys."""
 
-def run_lookup_experiment(kv_pairs: List[Tuple[Any, Any]], 
-                        existing_keys: List[Any], 
-                        non_existing_keys: List[Any]):
-    """Run experiment comparing lookup times for existing and non-existing keys."""
-    size = len(kv_pairs)
-    print(f"\nLookup Performance Comparison (Time in seconds) - Searching through {size} items")
-    print("Implementation\tExisting Key Lookup (1000 keys)\tNon-existing Key Lookup (1000 keys)")
-    print("-------------\t-------------------------\t---------------------------")
-    
-    # Benchmark each implementation
-    chain_existing, chain_non_existing = benchmark_get_operations(
-        HashTableChainning, size, kv_pairs, existing_keys, non_existing_keys)
-    open_existing, open_non_existing = benchmark_get_operations(
-        HashTableOpenAddressing, size, kv_pairs, existing_keys, non_existing_keys)
-    hybrid_existing, hybrid_non_existing = benchmark_get_operations(
-        HashTableHybrid, size, kv_pairs, existing_keys, non_existing_keys)
-    
-    # Print results with consistent formatting
-    print(f"Chaining\t{chain_existing:.6f}\t\t\t{chain_non_existing:.6f}")
-    print(f"Open Addressing\t{open_existing:.6f}\t\t\t{open_non_existing:.6f}")
-    print(f"Hybrid\t\t{hybrid_existing:.6f}\t\t\t{hybrid_non_existing:.6f}")
+    def print_lookup_table(title, benchmark_func):
+        """Generate structure for displaying experiment data."""
+        print(f"\n{title} Hash Table Lookup Performance (seconds)")
+        print("Size\tExisting Lookup\t\tNon-Existing Lookup")
+        print("----\t----------------\t-------------------")
+        for kv_pairs, existing_keys, non_existing_keys in zip(
+            kv_pairs_list, existing_keys_list, non_existing_keys_list):
+            
+            size = len(kv_pairs)
+            existing_time, non_existing_time = benchmark_func(
+                size, kv_pairs, existing_keys, non_existing_keys)
+            print(f"{size:<4}\t{existing_time:.6f} \t\t{non_existing_time:.6f}")
 
-if __name__ == "__main__":
-    print("Running doubling experiment...")
-    run_doubling_experiment()
+    # print results for each hash table configuration independently
+    # results are time took to lookup values in a given configuration
+    print_lookup_table("Chaining", 
+        lambda size, kvs, exists, not_exists: benchmark_get_operations(
+            HashTableChainning, size, kvs, exists, not_exists))
     
-    print("\nRunning lookup experiment...")
-    run_lookup_experiment()
+    print_lookup_table("Open Addressing", 
+        lambda size, kvs, exists, not_exists: benchmark_get_operations(
+            HashTableOpenAddressing, size, kvs, exists, not_exists))
+    
+    print_lookup_table("Hybrid", 
+        lambda size, kvs, exists, not_exists: benchmark_get_operations(
+            HashTableHybrid, size, kvs, exists, not_exists))
