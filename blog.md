@@ -296,4 +296,6 @@ Size    Existing Lookup         Non-Existing Lookup
 
 ## Future Work
 
+For future work, we could further explore the hybrid method and its use of the probe threshold. Our current implementation uses a fixed probe threshold, setting the value at three for every run. We could experiment with different probe threshold values to see if increasing or decreasing this value has any impact on runtime performance. We could also explore using dynamic thresholds based on load factor to see if runtime performance can be improved.
+
 ## Conclusion
