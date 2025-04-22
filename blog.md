@@ -12,7 +12,19 @@ toc: true
 
 ## Motivation
 
-TODO: Danny
+Hash tables are fundamental data structures used in countless applications, from database indexing to caching systems. The efficiency of these operations heavily depends on how the hash table handles collisions - when two different keys map to the same index. Our project investigates three prominent collision resolution strategies: chaining, open addressing, and a hybrid approach that combines both.
+
+The motivation for this comparison stems from several key considerations:
+
+1. **Performance Trade-offs**: Each collision resolution strategy presents unique trade-offs between memory usage, insertion time, and lookup performance. Chaining uses additional memory for linked lists but offers consistent performance, while open addressing is more memory-efficient but can suffer from clustering. The hybrid approach attempts to balance these trade-offs, but its effectiveness needs empirical validation.
+
+2. **Real-world Impact**: In practical applications, hash tables often need to handle both successful and unsuccessful lookups efficiently. For example, in a spell checker, most lookups will be successful (words are spelled correctly), but the system must also handle failed lookups (misspelled words) quickly to provide responsive suggestions.
+
+3. **Scalability Concerns**: As datasets grow, the performance characteristics of different collision resolution strategies can change dramatically. Our doubling experiment (testing with sizes from 1,000 to 512,000 entries) helps understand how each approach scales and at what point performance might degrade.
+
+4. **Implementation Complexity**: While theoretical analysis provides valuable insights, real-world performance can differ due to implementation details, memory access patterns, and hardware characteristics. Our empirical comparison across different operating systems (Windows and macOS) provides practical insights into these factors.
+
+By conducting this comprehensive comparison, we aim to provide data-driven insights that can help developers choose the most appropriate hash table configuration for their specific use case, considering factors like expected data size, lookup patterns, and performance requirements.
 
 ## Experiment Design
 
@@ -85,6 +97,8 @@ When using the tool, it is important to note that there should be no need for al
 ### Example Output
 
 Below is an example of what the expected output from running our tool looks like. This data, along with the analysis from other runs across operating systems, will help guide our analysis and conclusion on collision frequency and lookup performance of various hash table configurations.
+
+- Window OS
 
 ```text
 Starting hash table comparison experiments...
@@ -181,6 +195,102 @@ Size    Existing Lookup         Non-Existing Lookup
 ```
 
 Importantly, while this result was ran on a Windows system, our results and analysis were ran across a variety of operating systems, including Windows and macOS, in order to provide the most inclusive and well-rounded analysis possible.
+
+
+```text
+danielbekele@Daniels-MacBook-Pro-3 src % python main.py 
+Starting hash table comparison experiments...
+
+Generating experiment data...
+
+Running doubling experiment...
+
+Chaining Hash Table Population Performance (seconds)
+Size    Populate Time    Num. of Collisions
+----    --------------  ----------
+1000    0.000094        0
+2000    0.000166        0
+4000    0.000331        0
+8000    0.000902        0
+16000   0.001426        0
+32000   0.003253        0
+64000   0.008531        0
+128000  0.018017        0
+256000  0.050152        0
+512000  0.099632        0
+
+Open Addressing Hash Table Population Performance (seconds)
+Size    Populate Time    Num. of Collisions
+----    --------------  ----------
+1000    0.000618        493
+2000    0.003033        1029
+4000    0.009645        1999
+8000    0.020971        3945
+16000   0.051408        8036
+32000   0.118082        15951
+64000   0.491041        31951
+128000  2.330490        64169
+256000  15.483382       127762
+512000  21.686648       255631
+
+Hybrid Hash Table Population Performance (seconds)
+Size    Populate Time    Num. of Collisions
+----    --------------  ----------
+1000    0.000293        874
+2000    0.000498        1852
+4000    0.001072        3547
+8000    0.002150        7168
+16000   0.004979        14467
+32000   0.009560        28554
+64000   0.020484        57517
+128000  0.050377        115388
+256000  0.127418        229571
+512000  0.303631        459213
+
+Running lookup experiment...
+
+Chaining Hash Table Lookup Performance (seconds)
+Size    Existing Lookup         Non-Existing Lookup
+----    ----------------        -------------------
+1000    0.000090                0.000096
+2000    0.000086                0.000092
+4000    0.000086                0.000092
+8000    0.000107                0.000092
+16000   0.000096                0.000095
+32000   0.000101                0.000101
+64000   0.000126                0.000123
+128000  0.000166                0.000125
+256000  0.000207                0.000176
+512000  0.000253                0.000221
+
+Open Addressing Hash Table Lookup Performance (seconds)
+Size    Existing Lookup         Non-Existing Lookup
+----    ----------------        -------------------
+1000    0.000658                0.042120
+2000    0.001209                0.084219
+4000    0.002769                0.170023
+8000    0.002219                0.344002
+16000   0.002225                0.707919
+32000   0.004066                0.788226
+64000   0.007995                1.840707
+128000  0.014459                6.570866
+256000  0.154649                17.753949
+512000  0.088448                19.394856
+
+Hybrid Hash Table Lookup Performance (seconds)
+Size    Existing Lookup         Non-Existing Lookup
+----    ----------------        -------------------
+1000    0.000244                0.000297
+2000    0.000241                0.000287
+4000    0.000253                0.000287
+8000    0.000239                0.000313
+16000   0.000307                0.000331
+32000   0.000397                0.000508
+64000   0.000456                0.000556
+128000  0.000451                0.000611
+256000  0.000529                0.000606
+512000  0.000684                0.000764
+```
 
 ### Data Analysis
 
