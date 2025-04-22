@@ -38,7 +38,23 @@ This section of code is the rehashing function that will find the empty slot in 
 
 ### Hybrid
 
-TODO: Meghan
+The hybrid method combines the use of open addressing and chaining for hash tables. It does this with the parameter `probe_threshold`, which sets the point at which the algorithm will switch between open addressing and chaining.
+
+```python
+def __init__(self, capacity, probe_threshold=3):
+```
+
+When the probe threshold is less than three, open addressing is used, meaning that the algorithm will attempt to resolve collisions by probing sequentially for an empty slot within the hash table. If a collision occurs, the algorithm will check the next available slot, continuing this process up until `probe_threshold` times. For the `put` operation, this means inserting the key-value pair into the next available slot if the initial one is taken. For the `get` operation, this means looking at the next slot to continue searching for the desired key if it isn’t found at the current index.
+
+```python
+index = (index + 1) % self.capacity
+```
+
+Once the probe threshold is reached, the algorithm switches to chaining, where multiple values are stored in a list at a single index in the hash table. If another collision occurs at this point, rather than continuing to probe, the new key-value pair is added to the list. For the `put` operation, this involves appending the new key-value pair to the chain at that index. For the `get` operation, the algorithm searches through the list at that index to find the desired key and return its associated value.
+
+```python
+self.table[index].append((key, value))
+```
 
 ### Experiment and Benchmarking
 
