@@ -34,7 +34,50 @@ Our experiment was designed to tackle the following research question. **RQ:** C
 
 ### Chaining
 
-TODO: Darius
+What chaining is, is a collison resolution strategy that is used in hash tables. Hash tables have an index or bucket in the table that stores a list of key value pairs instead of single values. What chaining works todo is have multiple keys hash to the same index, then store them together in the buckets list which is why the method is called chaining. This allows the hash table to handle collisions easier without needing to probe other slots.
+
+My algorithm uses separate chaining to handle collisions with lists(chains) at index or buckets. Then it stores keys that are mapped together. Working to never probe but to only operate within the chain at the hashed index.
+
+```python
+self.buckets = [[] for _ in range(capacity)]
+```
+
+In this line I created an array where each element is a list. This list is the "chain" at each index. if two keys hash to the same index, they are stored in this list. Whuch is separate chaining.
+
+```python
+def put(self, key, value):
+        index = hash(key) % self.capacity
+        bucket = self.buckets[index]
+        # Record a collison if there is already at least one element in the bucket.
+        if bucket:
+            self.collisions += 1
+```
+
+here I compute the hash index index = hash(key) % self.capacity then I access the bucket at that index bucket = self.buckets[index] if that bucket is not empty, you record a collison, because another key already hashed there. Then, you either update an existing key or you would append a new  key.
+
+```python
+        for i, (k, v) in enumerate(bucket):
+            if k == key:
+                bucket[i] = (key, value)
+                return
+        bucket.append((key, value))
+```
+
+This is what it would look like if you have to iterate through the bucket to check if the key already exists. If it does, it updates the value. If not, it appends the new key-value pair to the bucket like mentioned above.
+
+```python
+def get(self, key):
+        """Retrieves the value associated with the given key from the hash table."""
+
+        index = hash(key) % self.capacity
+        bucket = self.buckets[index]
+        for k, v in bucket:
+            if k == key:
+                return v
+            return None
+```
+
+this works to look through the chain (the list at bucket[index]) and find the correct key. If it finds the correct key it will return the value, if not it will return None.
 
 ### Open Addressing
 
