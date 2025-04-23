@@ -196,9 +196,7 @@ Size    Existing Lookup         Non-Existing Lookup
 
 Importantly, while this result was ran on a Windows system, our results and analysis were ran across a variety of operating systems, including Windows and macOS, in order to provide the most inclusive and well-rounded analysis possible.
 
-
 ```text
-danielbekele@Daniels-MacBook-Pro-3 src % python main.py 
 Starting hash table comparison experiments...
 
 Generating experiment data...
@@ -294,8 +292,24 @@ Size    Existing Lookup         Non-Existing Lookup
 
 ### Data Analysis
 
+In our experiment comparing hash table configurations (chaining, open addressing, and hybrid) we found interesting patterns in how each approach handled doubling data sizes, collisions, and lookup efficiency. Chaining consistently demonstrated the best performance in terms of both population time and collision frequency. Across all sizes, chaining had zero collisions and kept and efficient population and lookup times. This is because chaining uses linked lists at each index to handle collisions, which scales well as long as the size remains manageable. The lookup times also remained minimal, even for non-existent keys.
+
+Open addressing, on the other hand, showed a steep increase in both collisions and time costs, especially as the table size doubled. The primary reason is that open addressing stores all elements within the table itself, using linear probing to resolve collisions. As the size increased, so did the time needed to find an open slot or resolve a failed search, which explains the drastic rise in non-existing key lookup times (reaching as high as 37 seconds in some cases). This method suffers under heavy population due to clustering and probe sequences.
+
+Our hybrid hash table, while faster than open addressing and more flexible than chaining, still incurred a large number of collisions. This approach attempts to balance between chaining and open addressing but ended up trading off efficiency. The high collision count suggests this implementation leans heavily on fallback mechanisms, which increase overhead during population. Yet, lookup times, especially for non-existing keys, remained low across the board, regardless of size. This suggests the hybrid strategy prioritizes efficient searches even if there are frequent collisions. Overall, our data shows that chaining remains the most scalable and efficient method for hash table configurations when looking at collisions and lookup time.
+
+Below is a table of the worst case time complexities of the different configurations and methods, according to the data we received in our experiments and are shown above.
+
+| Approach        | Population WCTC          | Lookup (Existing) WCTC | Lookup (Non-Existing) WCTC |
+|----------------|---------------------------|-------------------------|-----------------------------|
+| Chaining       | O(n)                      | O(1)                    | O(1)                        |
+| Open Addressing| Between O(n) and O(n²)    | O(n)                    | O(n), but much slower       |
+| Hybrid         | O(n)                      | O(1)                    | O(1)                        |
+
 ## Future Work
 
 For future work, we could further explore the hybrid method and its use of the probe threshold. Our current implementation uses a fixed probe threshold, setting the value at three for every run. We could experiment with different probe threshold values to see if increasing or decreasing this value has any impact on runtime performance. We could also explore using dynamic thresholds based on load factor to see if runtime performance can be improved.
 
 ## Conclusion
+
+In conclusion, this project provided a hands-on comparison of different hash table implementations, showing how chaining, open addressing, and hybrid methods perform under the same conditions. By running controlled tests and analyzing the results, we gained practical insight into how each approach handles collisions, lookups, and scales with data. Understanding the trade-offs between different hash table implementations is essential for designing efficient data structures.
